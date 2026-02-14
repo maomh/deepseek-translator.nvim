@@ -16,6 +16,45 @@ local function close_window()
   win = nil
 end
 
+function M.show_loading()
+  close_window()
+  
+  local loading_text = {
+    '',
+    '  🔄 正在查询中...',
+    '  请稍候',
+    '',
+  }
+  
+  buf = vim.api.nvim_create_buf(false, true)
+  vim.api.nvim_buf_set_option(buf, 'bufhidden', 'wipe')
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, loading_text)
+  vim.api.nvim_buf_set_option(buf, 'modifiable', false)
+  
+  local width = 30
+  local height = #loading_text
+  
+  local ui = vim.api.nvim_list_uis()[1]
+  local win_width = ui.width
+  local win_height = ui.height
+  
+  local col = math.floor((win_width - width) / 2)
+  local row = math.floor((win_height - height) / 2)
+  
+  local opts = {
+    relative = 'editor',
+    width = width,
+    height = height,
+    col = col,
+    row = row,
+    style = 'minimal',
+    border = config.options.window.border,
+  }
+  
+  win = vim.api.nvim_open_win(buf, false, opts)
+  vim.api.nvim_win_set_option(win, 'winhl', 'Normal:Normal')
+end
+
 function M.show_result(result)
   close_window()
   
@@ -66,5 +105,7 @@ function M.show_result(result)
     })
   end
 end
+
+M.close_window = close_window
 
 return M

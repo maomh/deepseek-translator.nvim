@@ -16,9 +16,12 @@ function M.translate_word()
     return
   end
   
+  ui.show_loading()
+  
   api.query_word(word, function(result)
     if result.error then
       vim.notify('Error: ' .. result.error, vim.log.levels.ERROR)
+      ui.close_window()
     else
       ui.show_result(result)
     end
@@ -49,9 +52,12 @@ function M.translate_selection()
     return
   end
   
+  ui.show_loading()
+  
   api.translate_text(text, function(result)
     if result.error then
       vim.notify('Error: ' .. result.error, vim.log.levels.ERROR)
+      ui.close_window()
     else
       ui.show_result(result)
     end
