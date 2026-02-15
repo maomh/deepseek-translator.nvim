@@ -29,10 +29,27 @@ function M.translate_word()
 end
 
 function M.translate_selection()
-    local regText = vim.fn.getreg('"') -- 获取当前寄存器中的文本
-    vim.cmd('normal! gvy')             -- 重新选中视觉模式的文本
-    local text = vim.fn.getreg('"')    -- 获取选中的文本
-    vim.fn.setreg('"', regText)        -- 恢复寄存器中的文本
+    -- 获取可视模式选中的文本
+    local start_pos = vim.fn.getpos("'<")
+    local end_pos = vim.fn.getpos("'>")
+    local start_line = start_pos[2]
+    local start_col = start_pos[3]
+    local end_line = end_pos[2]
+    local end_col = end_pos[3]
+
+    -- 获取选中的行
+    local lines = vim.fn.getline(start_line, end_line)
+
+    -- 处理单行选择
+    if start_line == end_line then
+        lines = { string.sub(lines[1], start_col, end_col) }
+    else
+        -- 处理多行选择
+        lines[1] = string.sub(lines[1], start_col)
+        lines[#lines] = string.sub(lines[#lines], 1, end_col)
+    end
+
+    local text = table.concat(lines, '\n')
 
     if text == '' then
         vim.notify('No text selected', vim.log.levels.WARN)
