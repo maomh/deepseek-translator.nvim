@@ -30,7 +30,7 @@ end
 
 function M.translate_selection()
     local regText = vim.fn.getreg('"') -- 获取当前寄存器中的文本
-    vim.fn.execute('normal! gvy')      -- 重新选中视觉模式的文本
+    vim.cmd('normal! gvy')             -- 重新选中视觉模式的文本
     local text = vim.fn.getreg('"')    -- 获取选中的文本
     vim.fn.setreg('"', regText)        -- 恢复寄存器中的文本
 
