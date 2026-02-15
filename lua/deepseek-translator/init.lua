@@ -28,25 +28,11 @@ function M.translate_word()
     end)
 end
 
--- 获取可视模式下的选中文本
-local function get_visual_selection()
-    local _, ls, cs = unpack(vim.fn.getpos("'<"))
-    local _, le, ce = unpack(vim.fn.getpos("'>"))
-    if ls == le then
-        return vim.fn.getline(ls):sub(cs, ce)
-    else
-        local lines = {}
-        table.insert(lines, vim.fn.getline(ls):sub(cs))
-        for i = ls + 1, le - 1 do
-            table.insert(lines, vim.fn.getline(i))
-        end
-        table.insert(lines, vim.fn.getline(le):sub(1, ce))
-        return table.concat(lines, "\n")
-    end
-end
-
 function M.translate_selection()
-    local text = get_visual_selection()
+    local regText = vim.fn.getreg('"') -- 获取当前寄存器中的文本
+    vim.fn.exec('normal! gvy')         -- 重新选中视觉模式的文本
+    local text = vim.fn.getreg('"')    -- 获取选中的文本
+    vim.fn.setreg('"', regText)        -- 恢复寄存器中的文本
 
     if text == '' then
         vim.notify('No text selected', vim.log.levels.WARN)
