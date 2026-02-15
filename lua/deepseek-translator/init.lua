@@ -29,6 +29,9 @@ function M.translate_word()
 end
 
 function M.translate_selection()
+    -- 结束可视模式，让最近的选中范围成为当前文本对象
+    vim.cmd('normal! ')
+
     -- 获取可视模式选中的文本
     local start_pos = vim.fn.getpos("'<")
     local end_pos = vim.fn.getpos("'>")
@@ -49,6 +52,7 @@ function M.translate_selection()
         lines[#lines] = string.sub(lines[#lines], 1, end_col)
     end
 
+    -- 将选中的文本连接成一个字符串
     local text = table.concat(lines, '\n')
 
     if text == '' then
