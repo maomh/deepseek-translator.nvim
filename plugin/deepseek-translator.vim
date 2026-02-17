@@ -12,9 +12,9 @@ vnoremap <silent> <Plug>(deepseek-translate-selection) <cmd>lua require('deepsee
 
 " Auto-map to <leader>t if not already mapped
 if !hasmapto('<Plug>(deepseek-translate-word)', 'n')
-  nmap <leader>t <Plug>(deepseek-translate-word)
+  nmap <leader>fy <Plug>(deepseek-translate-word)
 endif
 
 if !hasmapto('<Plug>(deepseek-translate-selection)', 'v')
-  vmap <leader>t <Plug>(deepseek-translate-selection)
+  vmap <leader>fy <Plug>(deepseek-translate-selection)
 endif
